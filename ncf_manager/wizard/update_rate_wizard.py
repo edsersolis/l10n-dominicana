@@ -49,9 +49,9 @@ class UpdateRateWizard(models.TransientModel):
                                   "BANCO LOPEZ DE HARO EUR - {}".format(v['euro']['selling_rate'])))
                 if k == 'progress':
                     rates.append(("progress-USD-{}".format(v['dollar']['selling_rate']),
-                                  "BANCO DOMINICANO DEL PROGRESO USD - {}".format(v['dollar']['selling_rate'])))
+                                  "BANCO DEL PROGRESO USD - {}".format(v['dollar']['selling_rate'])))
                     rates.append(("progress-EUR-{}".format(v['euro']['selling_rate']),
-                                  "BANCO DOMINICANO DEL PROGRESO EUR - {}".format(v['euro']['selling_rate'])))
+                                  "BANCO DEL PROGRESO EUR - {}".format(v['euro']['selling_rate'])))
                 if k == 'banreservas':
                     rates.append(("banreservas-USD-{}".format(v['dollar']['selling_rate']),
                                   "BANRESERVAS USD - {}".format(v['dollar']['selling_rate'])))

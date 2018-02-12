@@ -47,7 +47,7 @@ class ShopJournalConfig(models.Model):
 
     fiscal_active = fields.Boolean("Activo")
     fiscal_sequence_id = fields.Many2one("ir.sequence",
-                                         string=u"Crédito fiscal")
+                                         string=u"Crédito Fiscal")
     fiscal_number_next_actual = fields.Integer(string=u"Próximo número",
                                                related="fiscal_sequence_id.number_next_actual")
     fiscal_max = fields.Integer(string=u"Número máximo")
@@ -59,13 +59,13 @@ class ShopJournalConfig(models.Model):
     gov_max = fields.Integer(string=u"Número máximo")
 
     special_active = fields.Boolean("Activo")
-    special_sequence_id = fields.Many2one("ir.sequence", string="Especiales")
+    special_sequence_id = fields.Many2one("ir.sequence", string="Régimen Especial")
     special_number_next_actual = fields.Integer(string=u"Próximo número",
                                                 related="special_sequence_id.number_next_actual")
     special_max = fields.Integer(string=u"Número máximo")
 
     unico_active = fields.Boolean("Activo")
-    unico_sequence_id = fields.Many2one("ir.sequence", string="Especiales")
+    unico_sequence_id = fields.Many2one("ir.sequence", string="Único Ingreso")
     unico_number_next_actual = fields.Integer(string=u"Próximo número",
                                               related="unico_sequence_id.number_next_actual")
     unico_max = fields.Integer(string=u"Número máximo")
@@ -105,16 +105,16 @@ class ShopJournalConfig(models.Model):
                 if self.final_sequence_id:
                     self.final_sequence_id.write(
                         {"prefix": self.name + "02",
-                         "name": "Facturas Cliente Final {}".format(self.name)})
+                         "name": "Facturas Consumidor Final {}".format(self.name)})
                     self.fiscal_sequence_id.write(
                         {"prefix": self.name + "01",
                          "name": "Facturas Valor Fiscal {}".format(self.name)})
                     self.gov_sequence_id.write(
                         {"prefix": self.name + "15",
-                         "name": "Facturas Gubernamentales {}".format(self.name)})
+                         "name": "Facturas Gubernamental {}".format(self.name)})
                     self.special_sequence_id.write(
                         {"prefix": self.name + "14",
-                         "name": "Facturas Especiales {}".format(self.name)})
+                         "name": "Facturas Régimen Especial {}".format(self.name)})
                     self.unico_sequence_id.write(
                         {"prefix": self.name + "12",
                          "name": u"Facturas de Único Ingreso {}".format(self.name)})
@@ -177,7 +177,7 @@ class ShopJournalConfig(models.Model):
 
             seq_values = {'padding': 8,
                           'code': False,
-                          'name': 'Facturas de cliente final',
+                          'name': 'Facturas Consumidor Final',
                           'implementation': 'standard',
                           'company_id': 1,
                           'use_date_range': False,
@@ -190,39 +190,39 @@ class ShopJournalConfig(models.Model):
                           }
 
             seq_values["prefix"] = final_prefix
-            seq_values["name"] = "Facturas de cliente final {}".format(name)
+            seq_values["name"] = "Facturas Consumidor Final {}".format(name)
             final_id = self.env["ir.sequence"].create(seq_values)
             shop.final_sequence_id = final_id.id
 
             seq_values["prefix"] = fiscal_prefix
-            seq_values["name"] = "Facturas de cliente fiscal {}".format(name)
+            seq_values["name"] = "Facturas Crédito Fiscal {}".format(name)
             fiscal_id = self.env["ir.sequence"].create(seq_values)
             shop.fiscal_sequence_id = fiscal_id.id
 
             seq_values["prefix"] = gov_prefix
-            seq_values["name"] = "Facturas de cliente gubernamental {}".format(
+            seq_values["name"] = "Facturas Gubernamental {}".format(
                 name)
             gov_id = self.env["ir.sequence"].create(seq_values)
             shop.gov_sequence_id = gov_id.id
 
             seq_values["prefix"] = esp_prefix
-            seq_values["name"] = "Facturas de cliente especiales {}".format(
+            seq_values["name"] = "Facturas Régimen Especial {}".format(
                 name)
             esp_id = self.env["ir.sequence"].create(seq_values)
             shop.special_sequence_id = esp_id.id
 
             seq_values["prefix"] = unico_prefix
-            seq_values["name"] = "Facturas de unico ingreso {}".format(name)
+            seq_values["name"] = "Facturas Único Ingreso {}".format(name)
             esp_id = self.env["ir.sequence"].create(seq_values)
             shop.unico_sequence_id = esp_id.id
 
             seq_values["prefix"] = nc_prefix
-            seq_values["name"] = "Notas de credito {}".format(name)
+            seq_values["name"] = "Notas de Crédito {}".format(name)
             nc_id = self.env["ir.sequence"].create(seq_values)
             shop.nc_sequence_id = nc_id.id
 
             seq_values["prefix"] = nd_prefix
-            seq_values["name"] = "Notas de debito {}".format(name)
+            seq_values["name"] = "Notas de Débito {}".format(name)
             nd_id = self.env["ir.sequence"].create(seq_values)
             shop.refund_sequence_id = nc_id.id
             shop.nd_sequence_id = nd_id.id
@@ -233,7 +233,7 @@ class ShopJournalConfig(models.Model):
         message = False
 
         if invoice.type == "out_refund" and self.nc_max >= self.nc_sequence_id.number_next_actual - 10:
-            message = u"Las secuencias de Notas de Crédito para la sucursal {}"
+            message = u"Las secuencias de Nota de Crédito para la sucursal {}"
             u" han sobrepasado el número máximo establecido, debe solicitar"
             u" más NCF para esta sucursal".format(self.name)
 
@@ -248,12 +248,12 @@ class ShopJournalConfig(models.Model):
             u" más NCF para esta sucursal".format(self.name)
 
         elif sale_fiscal_type == "gov" and self.final_max >= self.final_sequence_id.number_next_actual - 10:
-            message = u"Las secuencias Gubernamentales para la sucursal {}"
+            message = u"Las secuencias Gubernamental para la sucursal {}"
             u" han sobrepasado el número máximo establecido, debe solicitar"
             u" más NCF para esta sucursal".format(self.name)
 
         elif sale_fiscal_type == "special" and self.final_max >= self.final_sequence_id.number_next_actual - 10:
-            message = u"Las secuencias de Regímenes Esp. para la sucursal {}"
+            message = u"Las secuencias de Régimen Especial para la sucursal {}"
             u" han sobrepasado el número máximo establecido, debe solicitar"
             u" más NCF para esta sucursal".format(self.name)
 

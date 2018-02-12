@@ -87,8 +87,8 @@ class Currency(models.Model):
     @api.multi
     def _compute_current_rate(self):
         """
-        Orveride native because whan to show rate_id on invoice to be shure
-         and do not search rate by datetime just by date because RD have rate by day
+        Override native function to show rate_id on invoices for validation
+         and for not fetching rate by datetime but only by date as DR the rate is set on daily basis
         :return:
         """
         date = self._context.get('date') or fields.Datetime.now()

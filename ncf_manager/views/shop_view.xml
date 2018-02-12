@@ -21,7 +21,7 @@
                                     <th>Activo</th>
                                     <th>Tipo de comprobante</th>
                                     <th>Siguiente número</th>
-                                    <th>Número maximo</th>
+                                    <th>Número máximo</th>
                                     <th groups="base.group_system">Secuencia</th>
                                 </tr>
                                 <tr>
